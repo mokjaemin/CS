@@ -91,3 +91,112 @@ public class HelloWorld{
 }
 // Factory latte :: Hi this coffee is 4000
 // Factory ame :: Hi this coffee is 3000
+
+
+
+// 3. Strategy Patern
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+// 구현 - interface의 메소드를 재정의해서 사용
+interface PaymentStrategy{
+    public void pay(int number);
+}
+
+class KAKAOCardStrategy implements PaymentStrategy{
+    private String name;
+    private String cardNumber;
+    private String cvv;
+    private String dateOfExpiry;
+
+    public KAKAOCardStrategy(String nm, String ccNum, String cvv, String exporyDate){
+        this.name = nm;
+        this.cardNumber = ccNum;
+        this.cvv = cvv;
+        this.dateOfExpiry = exporyDate;
+    }
+
+    @Override
+    public void pay(int amount){
+        System.out.println(amount + "paid using KAKAOCard.");
+    }
+}
+
+class LUNACardStrategy implements PaymentStrategy{
+    private String emailId;
+    private String password;
+
+    public LUNACardStrategy(String email, String pwd){
+        this.emailId = email;
+        this.password = pwd;
+    }
+    @Override
+    public void pay(int amout){
+        System.out.println(amount + "paid using LUNACard.");
+    }
+}
+
+class Item{
+    private String name;
+    private int price;
+    public Item(String name, int cost){
+        this.name = name;
+        this.price = cost;
+    }
+    public String getName(){
+        return name;
+    }
+    public String getPrice(){
+        return price;
+    }
+}
+
+class ShoppingCart{
+    List<Item> items;
+
+    public ShoppingCart(){
+        this.items = new ArrayList<Item>();
+    }
+
+    public void addItem(Item item){
+        this.items.add(item);
+    }
+
+    public void removeItem(Item item){
+        this.itmes.remove(item);
+    }
+
+    public int calculateTotal(){
+        int sum = 0;
+        for(Item item : items){
+            sum += item.getPrice();
+        }
+    }
+    return sum;
+
+    public void pay(PaymentStrategy paymentMethod){
+        int amount = calculateTotal();
+        paymentMethod.pay(amount);
+    }
+}
+
+public class HelloWorld{
+    public static void main(String[].args) {
+        ShoppingCart cart = new ShoppingCart();
+
+        Item A = new Item("jaemin1", 100);
+        Item B = new Item("jaemin2", 300);
+
+        cart.addItem(A);
+        cart.addItem(B);
+
+        // 전략이라고 불리는 캡슐화된 알고리즘을 컨텍스트 안에서 바꿔주면서
+        // 결제 전략만 바꿔서 다양한 방법으로 결제.
+        card.pay(new LUNACardStrategy("bamer@naver.com", "1234"))
+        card.pay(new KAKAOCardStrategy("bamer@naver.com", "1234", "123", "10/1"))        
+    }
+}
+
+// 400 paid using LUNACard
+// 400 paid using KAKAOCard
