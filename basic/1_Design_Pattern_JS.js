@@ -157,3 +157,38 @@ passport.use(new LocalStrategy(
         })
     }
 ));
+
+
+// Observer Pattern
+
+// ex 1
+const handler = {
+    get : function(target, name){
+        return name === 'name' ? `${target.a} ${target.b}` : target[name]
+    }
+}
+const p = new Proxy({a:'JAEMIN', b:'IS AMUMU JANGIn'}, handler)
+console.log(p.name)
+
+// ex 2
+function createReactiveObject(target, callback){
+    const proxy = new Proxy(target, {
+        set(obj, prop, value){
+            if(value !== obj[prop]){
+                const prev = obj[prop]
+                obj[prop] = value
+                callback(`${prop}가 [${prev}] >> [${value}]로 변경되었습니다.`)
+            }
+            return true
+        }
+    })
+    return proxy
+}
+
+const a = {
+    "재민" : "솔로"
+}
+
+const b = createReactiveObject(a, console.log)
+b.재민 = "솔로"
+b.재민 = "커플"
